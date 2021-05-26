@@ -8,7 +8,7 @@ This experimental extension allows customizing VSCode user interface beyond what
 - Custom stylesheet rules conveniently specified in settings.json
 
 <div style="text-align:center">
-  <img src="https://raw.githubusercontent.com/iocave/customize-ui/master/screenshot.png" alt="Preview">
+  <img src="https://raw.githubusercontent.com/iocave/vscode-gtk-ui/master/screenshot.png" alt="Preview">
 </div>
 
 ## Supported configuration options

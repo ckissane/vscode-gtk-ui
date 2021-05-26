@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+// import * as fse from 'fs-extra';
 
 interface FolderMap { [key: string]: string; }
 
@@ -47,6 +48,59 @@ class Extension {
 		return path.join(this.context.globalStoragePath, "modules");
 	}
 
+
+private copyFileSync( source:string, target:string ) {
+	var targetFile = target;
+
+    // If target is a directory, a new file with the same name will be created
+    if ( fs.existsSync( target ) ) {
+        if ( fs.lstatSync( target ).isDirectory() ) {
+            targetFile = path.join( target, path.basename( source ) );
+        }
+    }
+	let src = source;//path.join(this.sourcePath, name);
+	let dst = targetFile;//path.join(this.modulesPath, name);
+
+	let data = fs.readFileSync(src);
+
+	if (fs.existsSync(dst)) {
+		let current = fs.readFileSync(dst);
+		if (current.compare(data) === 0) {
+			return false;
+		}
+	}
+	fs.writeFileSync(dst, data);
+	return true;
+    
+
+    // fs.writeFileSync(targetFile, fs.readFileSync(source));
+}
+
+private copyFolderRecursiveSync( source:string, target:string ) {
+    var files = [];
+	let didn=false;
+    // Check if folder needs to be created or integrated
+    var targetFolder = path.join( target, path.basename( source ) );
+    if ( !fs.existsSync( targetFolder ) ) {
+        fs.mkdirSync( targetFolder );
+		didn=true;
+    }
+
+    // Copy
+    if ( fs.lstatSync( source ).isDirectory() ) {
+        files = fs.readdirSync( source );
+        files.forEach( ( file ) =>{
+            var curSource = path.join( source, file );
+            if ( fs.lstatSync( curSource ).isDirectory() ) {
+				didn=this.copyFolderRecursiveSync( curSource, targetFolder )||didn;
+            } else {
+                didn=this.copyFileSync( curSource, targetFolder )||didn;
+            }
+        } );
+    }
+	return didn;
+}
+
 	private copyModule(name: string) {
 
 		let src = path.join(this.sourcePath, name);
@@ -62,6 +116,16 @@ class Extension {
 		}
 		fs.writeFileSync(dst, data);
 		return true;
+	}
+
+	private copyModuleFolder(name: string) {
+
+		let src = path.join(this.sourcePath, name);
+		let dst = this.modulesPath;//path.join(this.modulesPath, name);
+		return this.copyFolderRecursiveSync(src, dst);
+		// fse.copySync(src, dst,{overwrite: true});
+	
+		// return true;
 	}
 
 	private get haveBottomActivityBar() {
@@ -91,11 +155,14 @@ class Extension {
 		// and will work after update
 
 		let browser = [
-			this.copyModule("customize-ui.css"),
+			this.copyModule("vscode-gtk-ui.css"),
 			this.copyModule("activity-bar.js"),
-			this.copyModule("customize-ui.js"),
+			this.copyModule("vscode-gtk-ui.js"),
 			this.copyModule("fonts.js"),
 			this.copyModule("title-bar.js")
+			,
+			this.copyModuleFolder("electron-gtk-theme"),
+			this.copyModuleFolder("../node_modules")
 		];
 
 		let mainProcess = [
@@ -130,16 +197,17 @@ class Extension {
 		if (monkeyPatch !== undefined) {
 			await monkeyPatch.activate();
 			let exports: API = monkeyPatch.exports;
-			exports.contribute("iocave.customize-ui",
+			exports.contribute("ckissane.vscode-gtk-ui",
 				{
 					folderMap: {
-						"customize-ui": this.modulesPath,
+						"vscode-gtk-ui": this.modulesPath,
+						'gtk-node_modules':path.join(this.sourcePath,'..','node_modules')
 					},
 					browserModules: [
-						"customize-ui/customize-ui"
+						"vscode-gtk-ui/vscode-gtk-ui"
 					],
 					mainProcessModules: [
-						"customize-ui/title-bar-main-process",
+						"vscode-gtk-ui/title-bar-main-process",
 					]
 				}
 			);

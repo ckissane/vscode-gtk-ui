@@ -1,13 +1,13 @@
 {
-	"name": "customize-ui",
-	"displayName": "Customize UI",
+	"name": "vscode-gtk-ui",
+	"displayName": "VSCODE GTK",
 	"description": "Advanced VSCode user interface customizations. Very experimental.",
 	"version": "0.1.52",
-	"publisher": "iocave",
+	"publisher": "ckissane",
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/iocave/customize-ui"
+		"url": "https://github.com/ckissane/vscode-gtk-ui"
 	},
 	"engines": {
 		"vscode": "^1.34.0"
@@ -153,24 +153,38 @@
 	"extensionDependencies": [
 		"iocave.monkey-patch"
 	],
-	"extensionKind": ["ui"],
+	"extensionKind": [
+		"ui"
+	],
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
+		"old-postinstall": "node ./node_modules/vscode/bin/install",
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
+	"dependencies": {
+		"balanced-match": "^1.0.0",
+		"chroma-js": "^2.1.2",
+		"color-convert": "^1.9.1",
+		"color-parser": "^0.1.0",
+		"desktop-env": "^1.0.0",
+		"lodash": "^4.17.21",
+		"native-css": "^2.0.0",
+		"postcss": "^6.0.20",
+		"postcss-import": "^11.1.0"
+	},
 	"devDependencies": {
-		"typescript": "^3.3.1",
-		"vscode": "^1.1.28",
+		"@types/mocha": "^2.2.42",
+		"@types/node": "^10.17.60",
+		"@types/vscode": "^1.56.0",
 		"tslint": "^5.12.1",
-		"@types/node": "^10.12.21",
-		"@types/mocha": "^2.2.42"
+		"typescript": "^3.3.1",
+		"vscode-test": "^1.5.2"
 	},
 	"__metadata": {
-		"id": "ac44dd75-bdb7-433b-9d86-23f9f070c07a",
-		"publisherDisplayName": "iocave",
-		"publisherId": "23f4e00e-db63-40fd-9f68-245f064ca7f5"
+		"id": "null",
+		"publisherDisplayName": "ckissane",
+		"publisherId": "idk"
 	}
 }

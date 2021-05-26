@@ -1,6 +1,6 @@
 define([
     "exports",
-    "customize-ui/utils",
+    "vscode-gtk-ui/utils",
     "vs/platform/configuration/common/configuration",
     "vs/base/common/platform",
     "vs/base/browser/browser",

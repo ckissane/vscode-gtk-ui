@@ -1,6 +1,7 @@
+
 define([
     "exports",
-    "customize-ui/utils",
+    "vscode-gtk-ui/utils",
     "vs/workbench/browser/parts/compositeBar",
     "vs/base/browser/ui/actionbar/actionbar",
     "vs/workbench/browser/parts/activitybar/activitybarPart",
@@ -14,7 +15,7 @@ define([
     "vs/platform/telemetry/common/telemetry", // required to instantiate before theme service otherwise there's cyclical dependency error :-/
     "vs/base/browser/browser",
 ], function (exports, utils, compositeBar, actionBar, activitybarPart, dom, grid, windowService, layout, configuration, activitybarActions, themeService, telemetry, browser) {
-
+    let chroma=nodeRequire( __dirname.replace(/^file:\/\//,'')+"/node_modules/chroma-js");
     let override = utils.override;
 
     let actionWidth = 32;
@@ -658,6 +659,117 @@ define([
         }
     }
 
+    let CustomizeGTK = class CustomizeGTK {
+        constructor(configurationService, telemetry, themeService) {
+            // let activityBarPosition = configurationService.getValue("customizeUI.activityBar");
+            // switch (activityBarPosition) {
+            //     case "top":
+            //     case "bottom":
+            //         let theme = themeService.getColorTheme ? themeService.getColorTheme() : themeService.getTheme();
+            //         let hideSettings = configurationService.getValue("customizeUI.activityBarHideSettings");
+            //         let moveStatusbar = configurationService.getValue("customizeUI.moveStatusbar");
+            //         moveActivityBarToPosition(theme, hideSettings, activityBarPosition, moveStatusbar);
+            //         break;
+            //     case "narrow": /* TODO: narrow sized activity bar */
+            //     case "wide":
+            //         resizeActivityBar(activityBarPosition);
+            //         break;
+            // }
+            document.body.parentElement.style.fontSize="12px";
+            utils.addStyle(`.monaco-workbench .part.editor>.content .editor-group-container>.title .monaco-icon-label:before{
+                height:auto;
+            }
+            `)
+            utils.addStyle(`
+            .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .tab-label {
+                line-height:initial;
+            }
+            `)
+            let theme = themeService.getColorTheme ? themeService.getColorTheme() : themeService.getTheme();
+            const cEq=(a,b)=>{
+                if((!a)||(!b)){
+                    return (!a)===(!b);
+                }
+                return chroma(a).toString()===chroma(b).toString();
+            }
+            setInterval(()=>{
+                let v=[...document.body.querySelectorAll(".monaco-text-button,.action-item>.label")];
+                for (let p of v){
+                    
+                    let {color,backgroundColor}=p.style;
+                    backgroundColor=backgroundColor+"";
+                    let bback=theme.getColor("button.background").toString();
+                    if(backgroundColor||true){
+                            // console.log("CC",chroma(backgroundColor));
+                        if(cEq(backgroundColor,bback)||true){
+                            p.classList.add('gtk-button');
+                            p.style="";
+                            // Object.assign(p.style,{color,backgroundColor});
+                            if(cEq(backgroundColor,bback)||p.classList.contains('suggested-action')){
+                                p.classList.add('suggested-action');
+                                // p.classList.add('suggested-action');
+                            }else{
+                                // p.style.color
+                                // p.classList.remove('accent');
+                            }
+                        }else{
+                            // console.log(backgroundColor,theme.getColor("button.background").toString());
+                        }
+                    }
+                }
+                let oo=[...document.body.querySelectorAll(".monaco-inputbox,.suggest-input-container")];
+                for (let p of oo){
+                    
+                    
+                        if(true){
+                            p.classList.add('gtk-entry');
+                            p.classList.remove('idle');
+                            p.style="";
+                            
+                        }else{
+                            // console.log(backgroundColor,theme.getColor("button.background").toString());
+                        }
+                    
+                }
+                let tabs=[...document.body.querySelectorAll(".tab")];
+                for (let p of tabs){
+                    p.parentElement.classList.add("gtk-tabs")
+
+                    // p.parentElement.style.height="auto";
+                    p.parentElement.classList.add("top")
+                    let {color,backgroundColor}=p.style;
+                    backgroundColor=backgroundColor+"";
+                    let bback=theme.getColor("button.background").toString();
+                    if(backgroundColor||true){
+                            // console.log("CC",chroma(backgroundColor));
+                        if(cEq(backgroundColor,bback)||true){
+                            p.classList.add('gtk-tab');
+                            p.style="";
+                            p.style.height="auto";
+                            // Object.assign(p.style,{color,backgroundColor});
+                            // if(cEq(backgroundColor,bback)||p.classList.contains('suggested-action')){
+                            //     p.classList.add('suggested-action');
+                            //     // p.classList.add('suggested-action');
+                            // }else{
+                            //     // p.style.color
+                            //     // p.classList.remove('accent');
+                            // }
+                        }else{
+                            // console.log(backgroundColor,theme.getColor("button.background").toString());
+                        }
+                    }
+                }
+                let tabsh=[...document.body.querySelectorAll(".tabs")];
+                for (let p of tabsh){
+                    p.classList.add("gtk-header")
+                    p.style="";
+                    p.parentElement.classList.add("gtk-notebook")
+                   
+                }
+            },10);
+        }
+    }
+
     CustomizeActivityBarLegacy1 = utils.decorate([
         utils.param(0, configuration.IConfigurationService),
         utils.param(1, themeService.IThemeService)
@@ -674,6 +786,11 @@ define([
         utils.param(1, telemetry.ITelemetryService), // workaround of cyclical dependency error, as theme service depends on it
         utils.param(2, themeService.IThemeService)
     ], CustomizeActivityBar);
+    CustomizeGTK = utils.decorate([
+        utils.param(0, configuration.IConfigurationService),
+        utils.param(1, telemetry.ITelemetryService), // workaround of cyclical dependency error, as theme service depends on it
+        utils.param(2, themeService.IThemeService)
+    ], CustomizeGTK);
 
     exports.run = function (instantationService) {
         if (grid.View !== undefined) {
@@ -683,6 +800,8 @@ define([
         } else {
             instantationService.createInstance(CustomizeActivityBar);
         }
+        instantationService.createInstance(CustomizeGTK);
+        
     }
 
 });

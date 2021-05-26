@@ -1,6 +1,6 @@
 define([
     "exports",
-    "customize-ui/utils",
+    "vscode-gtk-ui/utils",
     "vs/workbench/contrib/files/browser/views/explorerViewer",
     "vs/workbench/contrib/files/browser/views/openEditorsView",
     "vs/workbench/contrib/search/browser/searchResultsView",
