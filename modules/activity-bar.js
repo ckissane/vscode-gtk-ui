@@ -675,7 +675,7 @@ define([
             //         resizeActivityBar(activityBarPosition);
             //         break;
             // }
-            document.body.parentElement.style.fontSize="12px";
+            document.body.parentElement.style.fontSize="9px";
             utils.addStyle(`.monaco-workbench .part.editor>.content .editor-group-container>.title .monaco-icon-label:before{
                 height:auto;
             }
@@ -683,6 +683,11 @@ define([
             utils.addStyle(`
             .monaco-workbench .part.editor>.content .editor-group-container>.title .tabs-container>.tab .tab-label {
                 line-height:initial;
+            }
+            `)
+            utils.addStyle(`
+            .scm-view .scm-editor-container .monaco-editor-background, .scm-view .scm-editor-container .monaco-editor, .scm-view .scm-editor-container .monaco-editor .margin {
+                background-color:transparent !important;
             }
             `)
             let theme = themeService.getColorTheme ? themeService.getColorTheme() : themeService.getTheme();
@@ -705,7 +710,7 @@ define([
                             p.classList.add('gtk-button');
                             p.style="";
                             // Object.assign(p.style,{color,backgroundColor});
-                            if(cEq(backgroundColor,bback)||p.classList.contains('suggested-action')){
+                            if(cEq(backgroundColor,bback)||p.classList.contains('suggested-action')){//||p.matches(".extension-editor .monaco-action-bar .action-item .action-label.extension-action.label")){
                                 p.classList.add('suggested-action');
                                 // p.classList.add('suggested-action');
                             }else{
@@ -717,7 +722,7 @@ define([
                         }
                     }
                 }
-                let oo=[...document.body.querySelectorAll(".monaco-inputbox,.suggest-input-container")];
+                let oo=[...document.body.querySelectorAll(".monaco-inputbox,.suggest-input-container,.scm-view .scm-editor-container")];
                 for (let p of oo){
                     
                     
@@ -731,6 +736,18 @@ define([
                         }
                     
                 }
+                for (let p of [...document.body.querySelectorAll(".scm-view .scm-editor-container .monaco-editor-background, .scm-view .scm-editor-container .monaco-editor, .scm-view .scm-editor-container .monaco-editor .margin")]){
+                    
+                    
+                    if(true){
+                        p.style.backgroundColor="transparent";
+                        
+                    }else{
+                        // console.log(backgroundColor,theme.getColor("button.background").toString());
+                    }
+                
+            }
+                
                 let tabs=[...document.body.querySelectorAll(".tab")];
                 for (let p of tabs){
                     p.parentElement.classList.add("gtk-tabs")
@@ -764,6 +781,27 @@ define([
                     p.classList.add("gtk-header")
                     p.style="";
                     p.parentElement.classList.add("gtk-notebook")
+                   
+                }
+                let badges=[...document.body.querySelectorAll(".badge-content")];
+                for (let p of badges){
+                    p.classList.add("gtk-badge")
+                    p.style="";
+                    // p.parentElement.classList.add("gtk-notebook")
+                   
+                }
+                let headers=[...document.body.querySelectorAll(".pane-header")];
+                for (let p of headers){
+                    p.classList.add("gtk-button")
+                    p.parentElement.classList.add("gtk-header")
+                    p.style="";
+                    // p.parentElement.classList.add("gtk-notebook")
+                   
+                }
+                for (let p of [...document.body.querySelectorAll(".monaco-keybinding-key")]){
+                    p.classList.add("gtk-keycap")
+                    p.style="";
+                    // p.parentElement.classList.add("gtk-notebook")
                    
                 }
             },10);
