@@ -690,6 +690,16 @@ define([
                 background-color:transparent !important;
             }
             `)
+            utils.addStyle(`
+            .monaco-sash.vertical:before {
+                left:1px !important;
+            }
+            `)
+            utils.addStyle(`
+            .monaco-sash.horizontal:before {
+                top:1px !important;
+            }
+            `)
             let theme = themeService.getColorTheme ? themeService.getColorTheme() : themeService.getTheme();
             const cEq=(a,b)=>{
                 if((!a)||(!b)){
@@ -756,26 +766,35 @@ define([
                     p.parentElement.classList.add("top")
                     let {color,backgroundColor}=p.style;
                     backgroundColor=backgroundColor+"";
-                    let bback=theme.getColor("button.background").toString();
-                    if(backgroundColor||true){
-                            // console.log("CC",chroma(backgroundColor));
-                        if(cEq(backgroundColor,bback)||true){
                             p.classList.add('gtk-tab');
                             p.style="";
                             p.style.height="auto";
-                            // Object.assign(p.style,{color,backgroundColor});
-                            // if(cEq(backgroundColor,bback)||p.classList.contains('suggested-action')){
-                            //     p.classList.add('suggested-action');
-                            //     // p.classList.add('suggested-action');
-                            // }else{
-                            //     // p.style.color
-                            //     // p.classList.remove('accent');
-                            // }
-                        }else{
-                            // console.log(backgroundColor,theme.getColor("button.background").toString());
-                        }
-                    }
+                          
                 }
+                for (let p of document.body.querySelectorAll(".monaco-workbench .part.panel>.composite.title>.panel-switcher-container>.monaco-action-bar .action-item,.monaco-workbench .part.panel>.composite.title>.panel-switcher-container>.monaco-action-bar .gtk-tab")){
+                    p.parentElement.classList.add("gtk-tabs")
+
+                    // p.parentElement.style.height="auto";
+                    p.parentElement.classList.add("top")
+                    let {color,backgroundColor}=p.style;
+                    backgroundColor=backgroundColor+"";
+                    
+                            p.classList.add('gtk-tab');
+                            // p.classList.remove('action-item')
+                            if(p.classList.contains('checked')){
+                                p.classList.add('active');
+                            }else{
+                                p.classList.remove('active');
+                            }
+                            [...p.querySelectorAll('.action-label')].forEach(x=>x.style.border="none")
+                            p.style="";
+                            p.style.height="-webkit-fill-available";
+                            let g=p.parentElement.parentElement.parentElement.parentElement;
+                            g.classList.add("gtk-header")
+                            g.parentElement.classList.add("gtk-notebook")
+                            
+                }
+                
                 let tabsh=[...document.body.querySelectorAll(".tabs")];
                 for (let p of tabsh){
                     p.classList.add("gtk-header")

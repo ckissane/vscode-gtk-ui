@@ -93,7 +93,7 @@ const getTheme = function(config) {
     console.log(globalTheme)
     let theme = null;
     let dir = 'gtk-3.0';
-    let fileName = 'gtk-dark';
+    let fileNames = ['gtk-dark','gtk'];
     let buttonLayout = 'right';
     let isSnap = false;
 
@@ -288,7 +288,15 @@ const getTheme = function(config) {
       return cssString;
     };
 
-    let css = getCSS(`${theme}/${dir}/${fileName}.css`);
+    let css = "";
+    let fni=0;
+    while(!css && fni<fileNames.length){
+    try{
+      css=getCSS(`${theme}/${dir}/${fileNames[fni]}.css`);
+    }catch(e){
+    }
+    fni+=1;
+  }
 
     css = css.replace(/@define-color(\s[a-zA-Z_\s#\d\:;\(,\.\)]+)/g, '');
 
