@@ -66,7 +66,10 @@ const { css } = require('chroma-js');
               // color_vars[name]='$'+name;
               return "#deadbc";//$"+name;
             }
-          });
+          })
+          if(node.prop!=="overflow" && node.prop!=="min-width"&& node.prop!=="min-height"){
+          node.important=true;
+          }
         // console.log("B",node,bef,node.value)
         }
         // var _, name, value;

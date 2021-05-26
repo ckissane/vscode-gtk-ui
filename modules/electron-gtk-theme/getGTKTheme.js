@@ -66,7 +66,7 @@ const getIconTheme = function({environment, isSnap, themeName}) {
 }
 
 const getTheme = function(config) {
-  const {outputPath} = config;
+  const {outputPath,dark=true} = config;
   return desktopEnv().then(environment => {
     let schema;
     if (environment === 'Cinnamon') {
@@ -93,7 +93,7 @@ const getTheme = function(config) {
     console.log(globalTheme)
     let theme = null;
     let dir = 'gtk-3.0';
-    let fileNames = ['gtk-dark','gtk'];
+    let fileNames = dark?['gtk-dark','gtk']:['gtk','gtk-dark'];
     let buttonLayout = 'right';
     let isSnap = false;
 
@@ -142,7 +142,9 @@ const getTheme = function(config) {
         [/button {/g, 'button, .checkbox {'],
         [/button\:checked/g, 'input:checked'],
         [/[^\.|\-|@]radio/g, ' input[type=radio]'],
-        [/(?!\/)([^\-|@])\bcheck\b/g, '$1input[type=checkbox]'],
+        // [/(?!\/)([^\-|@])\bcheck\b/g, '$1input[type=checkbox]'],
+        [/((?:[^\.|\-|\w|@]|^))\bcheck:checked\b/g, '$1check.checked'],
+        [/((?:[^\.|\-|\w|@]|^))\bcheck\b/g, '$1.gtk-check'],
         [/((?:[^\.|\-|\w|@]|^))\bcheckbutton\b/g, '$1.checkbutton'],
         [/((?:[^\.|\-|\w|@]|^))\bmodelbutton\b/g, '$1.modelbutton'],
         [/((?:[^\.|\-|\w|@]|^))\btoolbutton\b/g, '$1.toolbutton'],

@@ -700,6 +700,11 @@ define([
                 top:1px !important;
             }
             `)
+            utils.addStyle(`
+            .was-setting-value-checkbox:not(.checked):before {
+                visibility:hidden;
+            }
+            `)
             let theme = themeService.getColorTheme ? themeService.getColorTheme() : themeService.getTheme();
             const cEq=(a,b)=>{
                 if((!a)||(!b)){
@@ -823,6 +828,27 @@ define([
                     // p.parentElement.classList.add("gtk-notebook")
                    
                 }
+                for (let p of [...document.body.querySelectorAll(".monaco-select-box")]){
+                    p.classList.add("gtk-button")
+                    p.style="";
+                    // p.parentElement.classList.add("gtk-notebook")
+                   
+                }
+                for (let p of [...document.body.querySelectorAll(".monaco-custom-checkbox")]){
+                    p.classList.add("gtk-check")
+                    p.style="";
+                    // p.parentElement.classList.add("gtk-notebook")
+                   
+                }
+                for (let p of [...document.body.querySelectorAll(".setting-value-checkbox,.was-setting-value-checkbox")]){
+                    p.classList.add("was-setting-value-checkbox")
+                    p.classList.remove("setting-value-checkbox")
+                    p.style="";
+                    // p.parentElement.classList.add("gtk-notebook")
+                   
+                }
+                
+                
             },10);
         }
     }
