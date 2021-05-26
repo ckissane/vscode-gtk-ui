@@ -284,23 +284,23 @@ class Coffee {
 
 	private async show()
 	{
-		let buttons = ["Buy me a coffee", "Maybe later", "Don't ask again"];
-		let b = await vscode.window.showInformationMessage(
-					"Hey! " +
-					"Customize UI requires constant maintenance to keep up with vscode changes. " +
-					"If you like what it does, please consider buying me a coffee.",
-					...buttons);
-		if (b === buttons[0]) {
-			vscode.env.openExternal(vscode.Uri.parse("https://www.buymeacoffee.com/matt1"));
-			this.snooze(90);
-		}
-		else if (b === buttons[1]) {
-			this.snooze(7);
-		}
-		else if (b === buttons[2]) {
-			// maybe change mind in ten years :)
-			this.snooze(365 * 10);
-		}
+		// let buttons = ["Buy me a coffee", "Maybe later", "Don't ask again"];
+		// let b = await vscode.window.showInformationMessage(
+		// 			"Hey! " +
+		// 			"vscode gtk UI requires constant maintenance to keep up with vscode changes. " +
+		// 			"If you like what it does, please consider buying me a coffee.",
+		// 			...buttons);
+		// if (b === buttons[0]) {
+		// 	vscode.env.openExternal(vscode.Uri.parse("https://www.buymeacoffee.com/ckissane"));
+		// 	this.snooze(90);
+		// }
+		// else if (b === buttons[1]) {
+		// 	this.snooze(7);
+		// }
+		// else if (b === buttons[2]) {
+		// 	// maybe change mind in ten years :)
+		// 	this.snooze(365 * 10);
+		// }
 	}
 
 	private snooze(days: number) {

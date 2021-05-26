@@ -743,6 +743,7 @@ define([
                     
                         if(true){
                             p.classList.add('gtk-entry');
+                            p.parentElement.style.overflow="visible";
                             p.classList.remove('idle');
                             p.style="";
                             
