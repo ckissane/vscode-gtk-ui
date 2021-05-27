@@ -67,7 +67,7 @@ const { css } = require('chroma-js');
               return "#deadbc";//$"+name;
             }
           })
-          if(node.prop!=="overflow" && node.prop!=="min-width"&& node.prop!=="min-height"){
+          if(node.prop!=="overflow" && node.prop!=="min-width"&& node.prop!=="min-height" && node.prop==="border-color"){
           node.important=true;
           }
         // console.log("B",node,bef,node.value)

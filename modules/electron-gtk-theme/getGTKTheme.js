@@ -1,5 +1,6 @@
 const fs = require('fs');
 const join = require('path').join;
+const dirname = require('path').dirname;
 const homedir = require('os').homedir;
 const execSync = require('child_process').execSync;
 const postgtk = require('./postcss-gtk/postcss-gtk');
@@ -121,6 +122,15 @@ const getTheme = function(config) {
       } catch (e) { // TODO: Make GTK version configurable
         cssString = fs.readFileSync(path.replace(/3\.0/g, '3.20'), {encoding: 'utf8'});
       }
+      
+      
+      cssString = cssString.replaceAll(/@import url\("resource:\/\/(.*)"\);/g,function(m,fil){
+        console.log("Q1",dirname(path),fil)
+        let q=execSync('gresource extract gtk.gresource '+fil, {encoding: 'utf8',cwd:dirname(path)});
+        console.log("Q",q,fil)
+        return q;
+        // gresource extract gtk.gresource /org/gnome/theme/gtk.css
+      })
       if (cssString.indexOf('resource://') > -1 || cssString.indexOf('Adwaita') > -1) {
         return getCSS(join(outputPath, './gtk.css'), r);
       }
@@ -128,7 +138,7 @@ const getTheme = function(config) {
         [/:backdrop[^\s]*?:not\(:backdrop\)/g,'.nonexixtyststysts'],
         [/:not\(:backdrop\)[^\s]*?:backdrop/g,'.nonexixtyststysts'],
         // [/:not\(:backdrop\)/g,''],
-        // [/:backdrop/g,''],
+        [/:backdrop/g,'.nonexixtyststysts'],
         [/\/\*.*?\*\//g,''],
         [/paned\.horizontal > separator/g,'.monaco-sash.vertical:before'],
         [/paned\.vertical > separator/g,'.monaco-sash.horizontal:before'],
