@@ -70,6 +70,9 @@ const { css } = require('chroma-js');
           if(node.prop!=="overflow" && node.prop!=="min-width"&& node.prop!=="min-height" && node.prop==="border-color"){
           node.important=true;
           }
+          if(node.prop==="padding" && node.parent.selector+""===".gtk-entry"){
+            node.remove();
+          }
         // console.log("B",node,bef,node.value)
         }
         // var _, name, value;
