@@ -123,17 +123,18 @@ const getTheme = function(config) {
         cssString = fs.readFileSync(path.replace(/3\.0/g, '3.20'), {encoding: 'utf8'});
       }
       
-      
+      let ostr=null;
+      let qc=0;
+      while(ostr!==cssString && qc<10){
+        qc+=1;
+        ostr=cssString+"";
       cssString = cssString.replaceAll(/@import url\("resource:\/\/(.*)"\);/g,function(m,fil){
-        console.log("Q1",dirname(path),fil)
         let q=execSync('gresource extract gtk.gresource '+fil, {encoding: 'utf8',cwd:dirname(path)});
-        console.log("Q",q,fil)
         return q;
         // gresource extract gtk.gresource /org/gnome/theme/gtk.css
       })
-      if (cssString.indexOf('resource://') > -1 || cssString.indexOf('Adwaita') > -1) {
-        return getCSS(join(outputPath, './gtk.css'), r);
-      }
+    }
+      
       let overrides = [
         [/:backdrop[^\s]*?:not\(:backdrop\)/g,'.nonexixtyststysts'],
         [/:not\(:backdrop\)[^\s]*?:backdrop/g,'.nonexixtyststysts'],
