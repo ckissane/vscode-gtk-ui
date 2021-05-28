@@ -4,6 +4,9 @@ define([
     "vscode-gtk-ui/utils",
     "vs/workbench/browser/parts/compositeBar",
     "vs/base/browser/ui/actionbar/actionbar",
+    "vs/base/browser/ui/button/button",
+    "vs/base/browser/ui/selectBox/selectBoxNative",
+    "vs/base/browser/ui/selectBox/selectBoxCustom",
     "vs/workbench/browser/parts/activitybar/activitybarPart",
     "vs/base/browser/dom",
     "vs/base/browser/ui/grid/grid",
@@ -14,7 +17,7 @@ define([
     "vs/platform/theme/common/themeService",
     "vs/platform/telemetry/common/telemetry", // required to instantiate before theme service otherwise there's cyclical dependency error :-/
     "vs/base/browser/browser",
-], function (exports, utils, compositeBar, actionBar, activitybarPart, dom, grid, windowService, layout, configuration, activitybarActions, themeService, telemetry, browser) {
+], function (exports, utils, compositeBar, actionBar,button,selectBoxNative,selectBoxCustom, activitybarPart, dom, grid, windowService, layout, configuration, activitybarActions, themeService, telemetry, browser) {
     let chroma=nodeRequire( __dirname.replace(/^file:\/\//,'')+"/node_modules/chroma-js");
     let override = utils.override;
 
@@ -661,6 +664,69 @@ define([
 
     let CustomizeGTK = class CustomizeGTK {
         constructor(configurationService, telemetry, themeService) {
+            try{
+                let getGTKTheme=nodeRequire( __dirname.replace(/^file:\/\//,'')+"/electron-gtk-theme/getGTKTheme");
+                getGTKTheme({}).then(function(result) {
+                        console.log("GTK",result);
+                        utils.addStyle(result.raw);
+                        // document.querySelector('head > script:nth-child(5)')
+                        // const style = document.createElement('style');
+                        //       style.id = 'theme';
+                        //       document.getElementsByTagName('head')[0].appendChild(style);
+                        // style.innerHTML = result.raw;
+                        return result;
+                      }).catch(function(e) {
+                        return console.error(e.stack);
+                      });
+            }catch(e){
+                console.log(e);
+            }
+            override(button.Button, "setHoverBackground", function(original) {
+            });
+            override(button.Button, "applyStyles", function(original) {
+                // original();
+                if (this._element) {
+                    this._element.classList.add('gtk-button');
+                    let background, foreground;
+                    if (this.options.secondary) {
+                        foreground = this.buttonSecondaryForeground ? this.buttonSecondaryForeground.toString() : '';
+                        background = this.buttonSecondaryBackground ? this.buttonSecondaryBackground.toString() : '';
+                        this._element.classList.remove('suggested-action');
+                    } else {
+                        foreground = this.buttonForeground ? this.buttonForeground.toString() : '';
+                        background = this.buttonBackground ? this.buttonBackground.toString() : '';
+                        this._element.classList.add('suggested-action');
+                    }
+        
+                    const border = this.buttonBorder ? this.buttonBorder.toString() : '';
+        
+                    // this._element.style.color = foreground;
+                    // this._element.style.backgroundColor = background;
+        
+                    // this._element.style.borderWidth = border ? '1px' : '';
+                    // this._element.style.borderStyle = border ? 'solid' : '';
+                    // this._element.style.borderColor = border;
+                    
+                }
+            });
+            override(selectBoxNative.SelectBoxNative, "applyStyles", function(original) {
+                // original();
+                // Style native select
+                if (this.selectElement) {
+                    this.selectElement.classList.add('gtk-button')
+                    this.selectElement.classList.add('combo')
+                }
+            });
+            override(selectBoxCustom.SelectBoxList, "applyStyles", function(original) {
+                // original();
+                // Style native select
+                if (this.selectElement) {
+                    this.selectElement.classList.add('gtk-button')
+                    this.selectElement.classList.add('combo')
+                    
+                }
+            });
+            
             // let activityBarPosition = configurationService.getValue("customizeUI.activityBar");
             // switch (activityBarPosition) {
             //     case "top":
@@ -675,7 +741,7 @@ define([
             //         resizeActivityBar(activityBarPosition);
             //         break;
             // }
-            document.body.parentElement.style.fontSize="9px";
+            document.body.parentElement.style.fontSize="12px";
             utils.addStyle(`.monaco-workbench .part.editor>.content .editor-group-container>.title .monaco-icon-label:before{
                 height:auto;
             }
@@ -714,29 +780,29 @@ define([
             }
             setInterval(()=>{
                 let v=[...document.body.querySelectorAll(".monaco-text-button,.action-item>.label")];
-                for (let p of v){
+                // for (let p of v){
                     
-                    let {color,backgroundColor}=p.style;
-                    backgroundColor=backgroundColor+"";
-                    let bback=theme.getColor("button.background").toString();
-                    if(backgroundColor||true){
-                            // console.log("CC",chroma(backgroundColor));
-                        if(cEq(backgroundColor,bback)||true){
-                            p.classList.add('gtk-button');
-                            p.style="";
-                            // Object.assign(p.style,{color,backgroundColor});
-                            if(cEq(backgroundColor,bback)||p.classList.contains('suggested-action')){//||p.matches(".extension-editor .monaco-action-bar .action-item .action-label.extension-action.label")){
-                                p.classList.add('suggested-action');
-                                // p.classList.add('suggested-action');
-                            }else{
-                                // p.style.color
-                                // p.classList.remove('accent');
-                            }
-                        }else{
-                            // console.log(backgroundColor,theme.getColor("button.background").toString());
-                        }
-                    }
-                }
+                //     let {color,backgroundColor}=p.style;
+                //     backgroundColor=backgroundColor+"";
+                //     let bback=theme.getColor("button.background").toString();
+                //     if(backgroundColor||true){
+                //             // console.log("CC",chroma(backgroundColor));
+                //         if(cEq(backgroundColor,bback)||true){
+                //             p.classList.add('gtk-button');
+                //             p.style="";
+                //             // Object.assign(p.style,{color,backgroundColor});
+                //             if(cEq(backgroundColor,bback)||p.classList.contains('suggested-action')){//||p.matches(".extension-editor .monaco-action-bar .action-item .action-label.extension-action.label")){
+                //                 p.classList.add('suggested-action');
+                //                 // p.classList.add('suggested-action');
+                //             }else{
+                //                 // p.style.color
+                //                 // p.classList.remove('accent');
+                //             }
+                //         }else{
+                //             // console.log(backgroundColor,theme.getColor("button.background").toString());
+                //         }
+                //     }
+                // }
                 let oo=[...document.body.querySelectorAll(".monaco-inputbox,.suggest-input-container,.scm-view .scm-editor-container")];
                 for (let p of oo){
                     
@@ -766,15 +832,20 @@ define([
                 
                 let tabs=[...document.body.querySelectorAll(".tab")];
                 for (let p of tabs){
-                    p.parentElement.classList.add("gtk-tabs")
+                    p.parentElement.classList.add("gtk-tabs");
+                    [...p.children].forEach(c=>c.classList.add("gtk-widget"));
 
                     // p.parentElement.style.height="auto";
                     p.parentElement.classList.add("top")
+                    p.parentElement.parentElement.classList.add("top")
+                    p.parentElement.parentElement.classList.add("gtk-header")
+                    p.parentElement.parentElement.parentElement.classList.add("gtk-notebook")
+                    // notebook > header.top > tabs > tab:checked
                     let {color,backgroundColor}=p.style;
                     backgroundColor=backgroundColor+"";
                             p.classList.add('gtk-tab');
                             p.style="";
-                            p.style.height="auto";
+                            p.style.maxHeight="-webkit-fill-available";
                           
                 }
                 for (let p of document.body.querySelectorAll(".monaco-workbench .part.panel>.composite.title>.panel-switcher-container>.monaco-action-bar .action-item,.monaco-workbench .part.panel>.composite.title>.panel-switcher-container>.monaco-action-bar .gtk-tab")){
@@ -829,12 +900,12 @@ define([
                     // p.parentElement.classList.add("gtk-notebook")
                    
                 }
-                for (let p of [...document.body.querySelectorAll(".monaco-select-box")]){
-                    p.classList.add("gtk-button")
-                    p.style="";
-                    // p.parentElement.classList.add("gtk-notebook")
+                // for (let p of [...document.body.querySelectorAll(".monaco-select-box")]){
+                //     p.classList.add("gtk-button")
+                //     p.style="";
+                //     // p.parentElement.classList.add("gtk-notebook")
                    
-                }
+                // }
                 for (let p of [...document.body.querySelectorAll(".monaco-custom-checkbox")]){
                     p.classList.add("gtk-check")
                     p.style="";

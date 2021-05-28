@@ -12,28 +12,7 @@ define([
     // ,getGTKTheme
     ) {
         'use strict';
-        window.mmm=module;
-        window.vvv=require;
-        console.log("RR",__dirname)
-        try{
-            let gog=nodeRequire( __dirname.replace(/^file:\/\//,'')+"/electron-gtk-theme/getGTKTheme");
-            // console.log("GOG",gog)
-            let getGTKTheme=gog;
-            getGTKTheme({}).then(function(result) {
-                    // console.log(result.raw);
-                    utils.addStyle(result.raw);
-                    // document.querySelector('head > script:nth-child(5)')
-                    // const style = document.createElement('style');
-                    //       style.id = 'theme';
-                    //       document.getElementsByTagName('head')[0].appendChild(style);
-                    // style.innerHTML = result.raw;
-                    return result;
-                  }).catch(function(e) {
-                    return console.error(e.stack);
-                  });
-        }catch(e){
-            console.log(e);
-        }
+       
         // console.log(getGTKTheme+"");
         // let addStyleSheet = utils.addStyleSheet;
 
