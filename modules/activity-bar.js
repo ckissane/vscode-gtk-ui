@@ -4,6 +4,7 @@ define([
     "vscode-gtk-ui/utils",
     "vs/workbench/browser/parts/compositeBar",
     "vs/base/browser/ui/actionbar/actionbar",
+    "vs/workbench/browser/parts/compositeBarActions",
     "vs/base/browser/ui/button/button",
     "vs/base/browser/ui/selectBox/selectBoxNative",
     "vs/base/browser/ui/selectBox/selectBoxCustom",
@@ -17,7 +18,7 @@ define([
     "vs/platform/theme/common/themeService",
     "vs/platform/telemetry/common/telemetry", // required to instantiate before theme service otherwise there's cyclical dependency error :-/
     "vs/base/browser/browser",
-], function (exports, utils, compositeBar, actionBar,button,selectBoxNative,selectBoxCustom, activitybarPart, dom, grid, windowService, layout, configuration, activitybarActions, themeService, telemetry, browser) {
+], function (exports, utils, compositeBar, actionBar,compositeBarActions,button,selectBoxNative,selectBoxCustom, activitybarPart, dom, grid, windowService, layout, configuration, activitybarActions, themeService, telemetry, browser) {
     let chroma=nodeRequire( __dirname.replace(/^file:\/\//,'')+"/node_modules/chroma-js");
     let override = utils.override;
 
@@ -664,6 +665,11 @@ define([
 
     let CustomizeGTK = class CustomizeGTK {
         constructor(configurationService, telemetry, themeService) {
+            utils.addStyle(`.monaco-custom-checkbox {
+                box-sizing:initial;
+                width:initial;
+                height:initial;
+            }`)
             try{
                 let getGTKTheme=nodeRequire( __dirname.replace(/^file:\/\//,'')+"/electron-gtk-theme/getGTKTheme");
                 getGTKTheme({}).then(function(result) {
@@ -726,6 +732,42 @@ define([
                     
                 }
             });
+            override(compositeBarActions.ActivityActionViewItem,"updateStyles", function(original) {
+                original();
+                if (this.container) {
+                    this.container.classList.add('gtk-tab');
+                    if(this.container.parentElement&&this.container.parentElement.parentElement){
+                        let v=this.container.parentElement.parentElement;
+                        if(v.classList.contains('vertical')){
+                        v.classList.add('left');
+                        v.classList.remove('top');
+                        }else{
+                            v.classList.add('top');
+                            v.classList.remove('left');
+                        }
+                    }
+                    // if (this.getAction().checked) {
+                    //     this.label.classList.add('checked');
+                    // } else {
+                    //     this.label.classList.remove('checked');
+                    // }
+                    // if (this.getAction().checked) {
+                    //     this.container.classList.add('active');
+                    // } else {
+                    //     this.container.classList.remove('active');
+                    // }
+                }
+            })
+            // override(compositeBarActions.ActivityActionViewItem,"updateChecked", function(original) {
+            //     original();
+            //     if (this.container) {
+            //         if (this.getAction().checked) {
+            //             this.container.classList.add('active');
+            //         } else {
+            //             this.container.classList.remove('active');
+            //         }
+            //     }
+            // })
             
             // let activityBarPosition = configurationService.getValue("customizeUI.activityBar");
             // switch (activityBarPosition) {
@@ -741,6 +783,10 @@ define([
             //         resizeActivityBar(activityBarPosition);
             //         break;
             // }
+            
+            utils.addStyle(`.monaco-workbench .activitybar>.content :not(.monaco-menu)>.monaco-action-bar .action-label{
+                width:100% !important;
+            }`)
             document.body.parentElement.style.fontSize="12px";
             utils.addStyle(`.monaco-workbench .part.editor>.content .editor-group-container>.title .monaco-icon-label:before{
                 height:auto;

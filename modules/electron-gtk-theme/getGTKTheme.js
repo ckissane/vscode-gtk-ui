@@ -152,10 +152,10 @@ const getTheme = function (config) {
         }
 
         let overrides = [
-          [/:backdrop[^\s]*?:not\(:backdrop\)/g, ".nonexixtyststysts"],
-          [/:not\(:backdrop\)[^\s]*?:backdrop/g, ".nonexixtyststysts"],
+          // [/:backdrop[^\s]*?:not\(:backdrop\)/g, ".nonexixtyststysts"],
+          // [/:not\(:backdrop\)[^\s]*?:backdrop/g, ".nonexixtyststysts"],
           // [/:not\(:backdrop\)/g,''],
-          [/:backdrop/g, ".nonexixtyststysts"],
+          // [/:backdrop/g, ".nonexixtyststysts"],
           [/\/\*.*?\*\//g, ""],
           [/paned\.horizontal > separator/g, ".monaco-sash.vertical:before"],
           [/paned\.vertical > separator/g, ".monaco-sash.horizontal:before"],
@@ -187,7 +187,7 @@ const getTheme = function (config) {
           [/[^\.\-|@]\btrough\b/g, ".trough"],
           [/[^\.\-|@]scalescale/g, ".scale"],
           [/((?:[^\.|\-|\w|@]|^))\blist\b/g, "$1.list"],
-          [/((?:[^\.|\-|\w|@]|^))\btab:checked\b/g, "$1.gtk-tab.active"],
+          // [/((?:[^\.|\-|\w|@]|^))\btab:checked\b/g, "$1.gtk-tab.active"],
           [/((?:[^\.|\-|\w|@]|^))\btab\b/g, "$1.gtk-tab"],
           [/((?:[^\.|\-|\w|@]|^))\btabs\b/g, "$1.gtk-tabs"],
           [/((?:[^\.|\-|\w|@]|^))\brow\b/g, "$1.row"],

@@ -90,6 +90,7 @@ const { css } = require("chroma-js");
           ) {
             node.remove();
           }
+          if((node.prop === "min-width"||node.prop === "min-height") && node.parent.selector===".gtk-badge") node.remove();
           // console.log("B",node,bef,node.value)
         }
         // var _, name, value;
