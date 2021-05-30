@@ -1,15 +1,9 @@
-# Customize UI README
+# GTK UI README
 
 This experimental extension allows customizing VSCode user interface beyond what's normally possible, such as
 
-- Changing interface fonts
-- Inline titlebar on macOS
-- Activity bar below sidebar
-- Custom stylesheet rules conveniently specified in settings.json
+- (ON LINUX) Custom stylesheet that syncs with GTK 3.0 theme
 
-<div style="text-align:center">
-  <img src="https://raw.githubusercontent.com/iocave/vscode-gtk-ui/master/screenshot.png" alt="Preview">
-</div>
 
 ## Supported configuration options
 
@@ -88,14 +82,14 @@ Allow adding custom stylesheet rules. It is in form of a map where selectors are
 
 ## How does it work
 
-Customize UI relies on the [Monkey Patch Extension](https://marketplace.visualstudio.com/items?itemName=iocave.monkey-patch) to inject custom javascript in VSCode. After installation you should
+GTK UI relies on the [Monkey Patch Extension](https://marketplace.visualstudio.com/items?itemName=iocave.monkey-patch) to inject custom javascript in VSCode. After installation you should
 be prompted to enable Monkey Patch. You can always trigger this manually by invoking the "Enable Monkey Patch" command.
 
 ## Credits
 
-Inline titlebar inspired by Jürg Lehni's Titlebar-less VSCode extension.
+Based off Customize UI.
 
 ## Coffee
 
-If you like this this extension, consider [buying me a coffee](https://www.buymeacoffee.com/matt1). Thank you!
+If you like this this extension, consider [buying me a coffee](https://www.buymeacoffee.com/ckissane). Thank you!
 
