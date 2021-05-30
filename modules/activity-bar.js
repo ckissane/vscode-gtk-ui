@@ -936,6 +936,7 @@ define([
                 for (let p of headers){
                     p.classList.add("gtk-button")
                     p.parentElement.classList.add("gtk-header")
+                    p.parentElement.parentElement.classList.add("gtk-treeview")
                     p.style="";
                     // p.parentElement.classList.add("gtk-notebook")
                    

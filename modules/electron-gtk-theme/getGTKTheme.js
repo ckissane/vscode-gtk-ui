@@ -254,7 +254,7 @@ const getTheme = function (config) {
           [/((?:[^\.|\-|\w|@]|^))\bworkbench\b/g, "$1.workbench"],
           [/((?:[^\.|\-|\w|@]|^))\bsearchbar\b/g, "$1.searchbar"],
           [/((?:[^\.|\-|\w|@]|^))\bactionbar\b/g, "$1.actionbar"],
-          [/((?:[^\.|\-|\w|@]|^))\btreeview\b/g, "$1.treeview"],
+          [/((?:[^\.|\-|\w|@]|^))\btreeview\b/g, "$1.gtk-treeview"],
           [/((?:[^\.|\-|\w|@]|^))\bpillbox\b/g, "$1.pillbox"],
           [/((?:[^\.|\-|\w|@]|^))\bdocktabstrip\b/g, "$1.docktabstrip"],
           [/((?:[^\.|\-|\w|@]|^))\bdocktab\b/g, "$1.docktab"],
