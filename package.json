@@ -43,7 +43,7 @@
 		],
 		"configuration": {
 			"type": "object",
-			"title": "Customize UI",
+			"title": "GTK UI",
 			"properties": {
 				"customizeUI.activityBar": {
 					"type": "string",

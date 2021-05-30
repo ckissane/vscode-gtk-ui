@@ -179,13 +179,13 @@ private copyFolderRecursiveSync( source:string, target:string ) {
 			this.haveFontCustomizations ||
 			this.haveStylesheetCustomizations)) {
 			if (updatedMainProcess) {
-				let res = await vscode.window.showInformationMessage("CustomizeUI extension was updated. Your VSCode instance needs to be restarted", "Restart");
+				let res = await vscode.window.showInformationMessage("GTK UI extension was updated. Your VSCode instance needs to be restarted", "Restart");
 				if (res === "Restart") {
 					this.promptRestart();
 				}
 			}
 			else if (updatedBrowser) {
-				let res = await vscode.window.showInformationMessage("CustomizeUI extension was updated. Your VSCode window needs to be reloaded.", "Reload Window");
+				let res = await vscode.window.showInformationMessage("GTK UI extension was updated. Your VSCode window needs to be reloaded.", "Reload Window");
 				if (res === "Reload Window") {
 					vscode.commands.executeCommand("workbench.action.reloadWindow");
 				}
@@ -212,7 +212,7 @@ private copyFolderRecursiveSync( source:string, target:string ) {
 				}
 			);
 		} else {
-			vscode.window.showWarningMessage("Monkey Patch extension is not installed. CustomizeUI will not work.");
+			vscode.window.showWarningMessage("Monkey Patch extension is not installed. GTK UI will not work.");
 		}
 	}
 
@@ -232,7 +232,7 @@ private copyFolderRecursiveSync( source:string, target:string ) {
 			await monkeyPatch.activate();
 			let exports: API = monkeyPatch.exports;
 			if (!exports.active()) {
-				let res = await vscode.window.showWarningMessage("Monkey Patch extension is not enabled. Please enable Monkey Patch in order to use Customize UI.", "Enable");
+				let res = await vscode.window.showWarningMessage("Monkey Patch extension is not enabled. Please enable Monkey Patch in order to use GTK UI.", "Enable");
 				if (res === "Enable") {
 					vscode.commands.executeCommand("iocave.monkey-patch.enable");
 				}
