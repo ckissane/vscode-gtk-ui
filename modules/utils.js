@@ -31,6 +31,7 @@ define([
 
         css.appendChild(document.createTextNode(style));
         document.getElementsByTagName("head")[0].appendChild(css);
+        return ()=>css.parentElement.removeChild(css);
     }
 
     // typescript decoration magic
