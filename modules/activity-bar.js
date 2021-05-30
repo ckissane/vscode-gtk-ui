@@ -665,6 +665,7 @@ define([
 
     let CustomizeGTK = class CustomizeGTK {
         constructor(configurationService, telemetry, themeService) {
+            const applyT=()=>{
             utils.addStyle(`.monaco-custom-checkbox {
                 box-sizing:initial;
                 width:initial;
@@ -672,7 +673,7 @@ define([
             }`)
             try{
                 let getGTKTheme=nodeRequire( __dirname.replace(/^file:\/\//,'')+"/electron-gtk-theme/getGTKTheme");
-                getGTKTheme({}).then(function(result) {
+                getGTKTheme({dark:themeService.getColorTheme().type==="dark"}).then(function(result) {
                         console.log("GTK",result);
                         utils.addStyle(result.raw);
                         // document.querySelector('head > script:nth-child(5)')
@@ -969,6 +970,9 @@ define([
                 
                 
             },10);
+        }
+        themeService.onColorThemeChange.event(applyT);
+        applyT();
         }
     }
 
