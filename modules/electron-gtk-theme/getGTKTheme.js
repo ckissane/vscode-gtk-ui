@@ -279,8 +279,8 @@ const getTheme = function (config) {
           [/\-gtk\-outline\-radius/g, "outline-width"],
           // [/[^\-|@]separator/g, '.separator'],
           [/((?:[^\.|\-|\w|@]|^))\bwindow\b/g, "$1body"],
-          [/\.background/g, "body"],
-
+          // [/\.background/g, "body"], //was
+          [/((?:[^\.|\-|\w|@]|^))\.background/g, "$1.gtk-background"],
           [/@define-color ([^\n]*)/g, "@define-a-color $1"],
           // [/([^\.\-@#\d])\b([A-Z]\w+)\b(?!;)/g, '.$2'],
           [/\.\./g, "."],

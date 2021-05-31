@@ -911,6 +911,8 @@ define([
 
   let CustomizeGTK = class CustomizeGTK {
     constructor(configurationService, telemetry, themeService) {
+      window.ttt=themeService;
+      window.ccc=configurationService;
         let removeOldStyle=()=>{}
       const applyT = () => {
         utils.addStyle(`.monaco-custom-checkbox {
@@ -932,6 +934,23 @@ define([
                   
               }
               removeOldStyle=utils.addStyle(result.raw);
+              
+              let bob=document.createElement("div");
+              bob.classList.add("gtk-background");
+              document.body.appendChild(bob);
+              let backSty=window.getComputedStyle(bob);
+
+              bob.className="sidebar view";
+              let sideSty=window.getComputedStyle(bob);
+              bob.parentElement.removeChild(bob);
+              configurationService.updateValue("workbench.colorCustomizations",{
+                ...configurationService.getValue("workbench.colorCustomizations"),
+                ...(backSty.backgroundColor?{"editor.background": chroma(backSty.backgroundColor).hex()}:{}),
+                ...(sideSty.backgroundColor?{"sideBar.background": chroma(sideSty.backgroundColor).hex()}:{})
+              })
+              
+
+              // configurationService.setSeworkbench.colorCustomizations
               return result;
             })
             .catch(function (e) {
