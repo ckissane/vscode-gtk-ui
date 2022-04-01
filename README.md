@@ -27,5 +27,9 @@ Based off Customize UI.
 
 ## Coffee
 
-If you like this this extension, consider [buying me a coffee](https://www.buymeacoffee.com/ckissane). Thank you!
+If you like this this extension, consider 
+
+[![](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/nunchucks/donate)
+
+ Thank you!
 
