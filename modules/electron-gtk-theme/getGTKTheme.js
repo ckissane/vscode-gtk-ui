@@ -5,7 +5,7 @@ const homedir = require("os").homedir;
 const execSync = require("child_process").execSync;
 const postgtk = require("./postcss-gtk/postcss-gtk");
 const desktopEnv = require("desktop-env");
-const uniq = require("lodash").uniq;
+const uniq = (a)=>a.filter(x=>a.filter(b=>b===a).length===1);
 const filter = require("./utils").filter;
 const each = require("./utils").each;
 const walk = require("./utils").walk;

@@ -1,6 +1,7 @@
 define([
   "exports",
   "vscode-gtk-ui/utils",
+  "vscode-gtk-ui/electron-gtk-theme/chroma",
   "vs/workbench/browser/parts/compositeBar",
   "vs/base/browser/ui/actionbar/actionbar",
   "vs/workbench/browser/parts/editor/tabsTitleControl",
@@ -11,7 +12,7 @@ define([
   "vs/workbench/browser/parts/activitybar/activitybarPart",
   "vs/base/browser/dom",
   "vs/base/browser/ui/grid/grid",
-  "vs/platform/windows/common/windows",
+  // "vs/platform/windows/common/windows",
   "vs/workbench/browser/layout",
   "vs/platform/configuration/common/configuration",
   "vs/workbench/browser/parts/activitybar/activitybarActions",
@@ -21,6 +22,7 @@ define([
 ], function (
   exports,
   utils,
+  chroma,
   compositeBar,
   actionBar,
   tabsTitleControl,
@@ -31,7 +33,7 @@ define([
   activitybarPart,
   dom,
   grid,
-  windowService,
+  // windowService,
   layout,
   configuration,
   activitybarActions,
@@ -39,9 +41,11 @@ define([
   telemetry,
   browser
 ) {
-  let chroma = nodeRequire(
-    __dirname.replace(/^file:\/\//, "") + "/node_modules/chroma-js"
-  );
+  console.log("POTATO",__dirname,chroma);
+  // let chroma = nodeRequire(
+  //   __dirname + "/electron-gtk-theme/chroma.js"
+  // );
+  const windowService={};
   let override = utils.override;
 
   let actionWidth = 32;
@@ -922,8 +926,9 @@ define([
             }`);
         try {
           let getGTKTheme = nodeRequire(
-            __dirname.replace(/^file:\/\//, "") +
-              "/electron-gtk-theme/getGTKTheme"
+
+            vscode.context.configuration().userDataDir+"/User/globalStorage/ckissane.vscode-gtk-ui/modules/electron-gtk-theme/getGTKTheme.js"
+
           );
           getGTKTheme({ dark: themeService.getColorTheme().type === "dark" })
             .then(function (result) {
@@ -931,24 +936,32 @@ define([
               try{
                   removeOldStyle();
               }catch(e){
-                  
+
               }
               removeOldStyle=utils.addStyle(result.raw);
-              
+
               let bob=document.createElement("div");
               bob.classList.add("gtk-background");
               document.body.appendChild(bob);
-              let backSty=window.getComputedStyle(bob);
-
+              const sca=(computedStyle)=>Object.fromEntries(Array.from(computedStyle).map(key => [key, computedStyle.getPropertyValue(key)]).filter(([a,b])=>b!==""))
+              let backSty=sca(window.getComputedStyle(bob));
+    
               bob.className="sidebar view";
-              let sideSty=window.getComputedStyle(bob);
+              let sideSty=sca(window.getComputedStyle(bob));
+
+              bob.className="never-have-this-class-terminal";
+              let termSty=sca(window.getComputedStyle(bob));
+              
               bob.parentElement.removeChild(bob);
+            
               configurationService.updateValue("workbench.colorCustomizations",{
                 ...configurationService.getValue("workbench.colorCustomizations"),
-                ...(backSty.backgroundColor?{"editor.background": chroma(backSty.backgroundColor).hex()}:{}),
-                ...(sideSty.backgroundColor?{"sideBar.background": chroma(sideSty.backgroundColor).hex()}:{})
+                ...(backSty["background-color"]?{"editor.background": chroma(backSty["background-color"]).hex()}:{}),
+                ...(backSty["background-color"]?{"editorGroupHeader.tabsBackground": chroma(backSty["background-color"]).hex()}:{}),
+                ...(termSty["background-color"]?{"terminal.background": chroma(termSty["background-color"]).hex()}:{}),
+                ...(sideSty["background-color"]?{"sideBar.background": chroma(sideSty["background-color"]).hex()}:{})
               })
-              
+
 
               // configurationService.setSeworkbench.colorCustomizations
               return result;
@@ -1081,6 +1094,10 @@ define([
               "gtk-notebook"
             );
             tabContainer.style = "";
+            // TODO: KEEP?
+            let theme = themeService.getColorTheme ? themeService.getColorTheme() : themeService.getTheme();
+            console.log("THEME",theme)
+            // tabContainer.style.backgroundColor = theme.colorMap["editorGroupHeader.tabsBackground"].toString();
             tabContainer.style.maxHeight = "-webkit-fill-available";
           }
         );

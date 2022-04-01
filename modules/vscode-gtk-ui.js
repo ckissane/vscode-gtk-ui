@@ -12,7 +12,7 @@ define([
     // ,getGTKTheme
     ) {
         'use strict';
-       
+
         // console.log(getGTKTheme+"");
         // let addStyleSheet = utils.addStyleSheet;
 
@@ -20,7 +20,7 @@ define([
         // if (!url.startsWith("file://")) {
         //     url = 'file://' + url;
         // }
-        
+
         // addStyleSheet(url);
         // getGTKTheme({}).then(function(result) {
         //     console.log(result.raw);
@@ -42,16 +42,16 @@ define([
                 let service = this;
 
                 let run = function(what) {
-                    try {                        
-                        what.run(service);                        
+                    try {
+                        what.run(service);
                     } catch (e) {
                         console.error(e);
                     }
                 };
 
                 run(activityBar);
-                run(fonts);                
-                run(titleBar);                
+                run(fonts);
+                run(titleBar);
             }
         }
 
