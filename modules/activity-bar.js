@@ -941,8 +941,10 @@ define([
               removeOldStyle=utils.addStyle(result.raw);
 
               let bob=document.createElement("div");
+              let bob2=document.createElement("div");
               bob.classList.add("gtk-background");
               document.body.appendChild(bob);
+              bob.appendChild(bob2);
               const sca=(computedStyle)=>Object.fromEntries(Array.from(computedStyle).map(key => [key, computedStyle.getPropertyValue(key)]).filter(([a,b])=>b!==""))
               let backSty=sca(window.getComputedStyle(bob));
     
@@ -952,12 +954,18 @@ define([
               bob.className="never-have-this-class-terminal";
               let termSty=sca(window.getComputedStyle(bob));
               
+              bob.className="gtk-notebook";
+              bob2.className="gtk-header";
+              let tabBarSty=sca(window.getComputedStyle(bob2));
+              
+
+              
               bob.parentElement.removeChild(bob);
             
               configurationService.updateValue("workbench.colorCustomizations",{
                 ...configurationService.getValue("workbench.colorCustomizations"),
                 ...(backSty["background-color"]?{"editor.background": chroma(backSty["background-color"]).hex()}:{}),
-                ...(backSty["background-color"]?{"editorGroupHeader.tabsBackground": chroma(backSty["background-color"]).hex()}:{}),
+                ...(tabBarSty["background-color"]?{"editorGroupHeader.tabsBackground": chroma(tabBarSty["background-color"]).hex()}:{}),
                 ...(termSty["background-color"]?{"terminal.background": chroma(termSty["background-color"]).hex()}:{}),
                 ...(sideSty["background-color"]?{"sideBar.background": chroma(sideSty["background-color"]).hex()}:{})
               })

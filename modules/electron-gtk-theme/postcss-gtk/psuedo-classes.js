@@ -34,6 +34,29 @@
           })();
           (rule.selector = selectors.join(',\n'));
         }
+        
+        if (rule.selector.indexOf('tabbar .box .gtk-notebook .gtk-header') !== -1) {
+          selectors = (function() {
+            var i, len, ref, results;
+            ref = postcss.list.comma(rule.selector);
+            results = [];
+            for (i = 0, len = ref.length; i < len; i++) {
+              selector = ref[i];
+              sel = selector;
+              if (sel.indexOf('tabbar .box .gtk-notebook .gtk-header') !== -1) {
+                results.push(sel.replace('tabbar .box .gtk-notebook .gtk-header', '.gtk-notebook .gtk-header'));
+              }else{
+                results.push(sel);
+              }
+              
+              // if (sel.indexOf(':backdrop') !== -1) {
+              //   throw rule.error(`Unnecessary extra :backdrop in ${JSON.stringify(selector)}`);
+              // }
+            }
+            return results;
+          })();
+          (rule.selector = selectors.join(',\n'));
+        }
         if (rule.selector.indexOf('.terminal') !== -1) {
           selectors = (function() {
             var i, len, ref, results;
